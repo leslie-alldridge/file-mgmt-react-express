@@ -17,9 +17,23 @@ class App extends Component {
     const fd = new FormData();
     fd.append("image", this.state.selectedFile, this.state.selectedFile.name);
 
-    axios.post("gs://lol1-aac67.appspot.com", fd).then(res => {
-      console.log(res);
-    });
+    axios
+      .post(
+        "https://us-central1-lol1-aac67.cloudfunctions.net/uploadFile",
+        fd,
+        {
+          onUploadProgress: progressEvent => {
+            console.log(
+              "upload progess:" +
+                Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+                "%"
+            );
+          }
+        }
+      )
+      .then(res => {
+        console.log(res);
+      });
   };
 
   render() {
